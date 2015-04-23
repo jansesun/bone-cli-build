@@ -13,24 +13,25 @@ function timestamp() {
 	date = date.toString().length > 1 ? date : ('0' + date);
 	return year + month + date;
 }
-function getTargetFile(file) {
+function getTargetFile(file, bone, dir) {
 	var autoNameNum = 0,
 		ext = path.extname(file),
 		basename = path.basename(file, ext),
 		nameFlag;
-	while(bone.fs.existFile(file)) {
+	do {
 		nameFlag = timeMap[Math.floor(autoNameNum / 26)];
 		nameFlag += timeMap[Math.floor(autoNameNum % 26)];
 		autoNameNum++;
-		file = basename + '_' + timestamp() + nameFlag + ext;
-	}
+		file = dir + basename + '_' + timestamp() + nameFlag + ext;
+	} while(bone.fs.existFile(file));
 	return file;
 }
 function buildFileArray(files, bone) {
 	files.forEach(function(file) {
-		var targetFile;
+		var targetFile,
+			dir = '.' + path.dirname(file).replace(/^(\.\/)?build/, '') + '/';
 		file = path.resolve(file);
-		targetFile = getTargetFile(file);
+		targetFile = getTargetFile(file, bone, dir);
 		if(bone.fs.existFile(file, {notFs: true})) {
 			var readStream = bone.fs.createReadStream(file);
 			var writeStream = bone.fs.createWriteStream(targetFile , {focus: true});
