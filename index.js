@@ -7,10 +7,10 @@ function timestamp() {
 	var time = new Date(),
 		year, month, date;
 	year = time.getFullYear() - 2000;
-	month = time.getMonth() + 1;
-	month = month.toString().length > 1 ? month : ('0' + month);
-	date = time.getDate();
-	date = date.toString().length > 1 ? date : ('0' + date);
+	month = (time.getMonth() + 1) + '';
+	month = month.length > 1 ? month : ('0' + month);
+	date = time.getDate() + '';
+	date = date.length > 1 ? date : ('0' + date);
 	return year + month + date;
 }
 function getTargetFile(file, bone, dir) {
